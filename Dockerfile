@@ -37,8 +37,8 @@ FROM multiarch/alpine:${ARCHITECTURE}-v3.11 as builder
 
 ENV VERSION=master
 
-# Add unprivileged user
-RUN echo "ttynvt:x:1000:1000:ttynvt:/:" > /etc_passwd
+# Add root without shell
+RUN echo "root:x:0:0:root:/:" > /etc_passwd
 
 # Install basic gcc tools
 # autoconf is needed for autoreconf command
@@ -93,6 +93,9 @@ COPY --from=builder /etc_passwd /etc/passwd
 # Copy static binary
 COPY --from=builder /ttynvt/src/ttynvt /ttynvt
 
-USER ttynvt
-ENTRYPOINT ["/ttynvt"]
+# Needs to run as since /dev/fuse is root:root
+USER root
+# -f run in foreground, no forking
+# -E log to stdout
+ENTRYPOINT ["/ttynvt", "-f", "-E"]
 CMD ["--help"]
