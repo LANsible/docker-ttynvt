@@ -3,12 +3,21 @@ version: "3"
 services:
   ttynvt:
     container_name: ttynvt
-    image: lansible/ttynvt:master
-    command: -E -n ttyNVT0 -S 192.168.1.23:23
+    image: lansible/ttynvt:latest
+    command: -n ttyNVT0 -S 192.168.1.46:23
     read_only: true
     restart: always
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - '/dev/cuse:/dev/cuse'
 
+  # Example connection
   serial:
     container_name: serial
     image: alpine
     command: microcom -s 9600 /dev/ttyNVT0
+    devices:
+      - /dev/ttyNVT0:/dev/ttyNVT0
+    depends_on:
+      - ttynvt
