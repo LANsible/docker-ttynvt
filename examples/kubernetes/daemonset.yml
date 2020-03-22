@@ -1,51 +1,44 @@
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: ttynvt
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: ttynvt
+  name: zwave-ttynvt
+  namespace: automating
   labels:
-    name: ttynvt
+    app: zwave-ttynvt
 spec:
   selector:
     matchLabels:
-      name: ttynvt
+      app: zwave-ttynvt
   template:
     metadata:
       labels:
-        name: ttynvt
-    serviceAccountName: ttynvt
+        app: zwave-ttynvt
+    # serviceAccountName: zwave-ttynvt
     spec:
       containers:
-      - name: ttynvt
-        image: lansible/ttynvt:latest
-        securityContext:
-          # Needed to read the tty device on the host
-          # Related: https://github.com/kubernetes/kubernetes/issues/60748
-          privileged: true
-          # Make container filesystem readonly
-          readOnlyRootFilesystem: true
-        resources:
-          limits:
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        volumeMounts:
-        - name: cuse
-          mountPath: /dev/cuse
-        # - name: dev
-        #   mountPath: /dev
-        #   readOnly: true
-      terminationGracePeriodSeconds: 30
+        - name: zwave-ttynvt
+          image: lansible/ttynvt:master
+          imagePullPolicy: Always
+          args:
+            - -n
+            - ttyNVT0
+            - -S
+            - 192.168.1.23:23
+          securityContext:
+            # Needed to read the tty device on the host
+            # Related: https://github.com/kubernetes/kubernetes/issues/60748
+            privileged: true
+            # Make container filesystem readonly
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              memory: 100Mi
+          volumeMounts:
+            - name: cuse
+              mountPath: /dev/cuse
       volumes:
         - name: cuse
           hostPath:
             path: /dev/cuse
-        # - name: dev
-        #   hostPath:
-        #     path: /dev
+            type: CharDevice
