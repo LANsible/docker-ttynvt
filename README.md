@@ -13,3 +13,7 @@ This should result in the /dev/ttyNVT0 port being available:
 # ls -l /dev/ttyNVT0
 crw-rw---- 1 root dialout 241, 0 mrt 12 22:23 /dev/ttyNVT0
 ```
+
+## Credits
+
+* [lars-thrane-as/ttynvt](https://gitlab.com/lars-thrane-as/ttynvt)
