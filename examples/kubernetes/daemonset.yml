@@ -1,9 +1,13 @@
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: zwave-ttynvt
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: zwave-ttynvt
-  namespace: automating
   labels:
     app: zwave-ttynvt
 spec:
@@ -14,7 +18,7 @@ spec:
     metadata:
       labels:
         app: zwave-ttynvt
-    # serviceAccountName: zwave-ttynvt
+    serviceAccountName: zwave-ttynvt
     spec:
       containers:
         - name: zwave-ttynvt
