@@ -1,6 +1,15 @@
 # docker-ttynvt
 Dockerized version of ttnvt, RFC2217 serial to device to a local TTY device
 
+## Requirements
+
+This requires a kernel compiled with the [CUSE](https://cateee.net/lkddb/web-lkddb/CUSE.html) enabled, you can check this by running:
+
+```
+cat /boot/config-* | grep CONFIG_CUSE
+```
+This should return `CONFIG_CUSE=m` or `CONFIG_CUSE=y` otherwise this container isn't working for you.
+
 ## Run locally
 
 Test this image locally like:
