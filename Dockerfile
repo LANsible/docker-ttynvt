@@ -2,7 +2,7 @@
 # Build static libfuse
 #######################################################################################################################
 ARG ARCHITECTURE
-FROM multiarch/alpine:${ARCHITECTURE}-v3.11 as libfuse
+FROM multiarch/alpine:${ARCHITECTURE}-v3.12 as libfuse
 
 ENV VERSION=fuse-2.9.9
 
@@ -33,7 +33,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 # Build static ttnvt
 #######################################################################################################################
 ARG ARCHITECTURE
-FROM multiarch/alpine:${ARCHITECTURE}-v3.11 as builder
+FROM multiarch/alpine:${ARCHITECTURE}-v3.12 as builder
 
 ENV VERSION=master
 
