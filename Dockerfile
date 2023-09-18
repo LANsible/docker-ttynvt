@@ -52,9 +52,11 @@ RUN apk --no-cache add \
       linux-headers \
       upx
 
-RUN git clone --depth 1 --branch "${VERSION}" https://gitlab.com/lars-thrane-as/ttynvt.git /ttynvt
+RUN git clone https://gitlab.com/lars-thrane-as/ttynvt.git /ttynvt
 
 WORKDIR /ttynvt
+
+RUN git checkout e51a98e4b270002c2bb0bcca4452e74b8ec9c8d2
 
 # Copy header files and static library
 COPY --from=libfuse /libfuse/lib/.libs/libfuse.a /lib/fuse/
