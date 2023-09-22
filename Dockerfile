@@ -35,7 +35,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 ARG ARCHITECTURE
 FROM multiarch/alpine:${ARCHITECTURE}-v3.12 as builder
 
-ENV VERSION=master
+ENV VERSION=v0.15
 
 # Add root without shell
 RUN echo "root:x:0:0:root:/:" > /etc_passwd
@@ -65,14 +65,12 @@ ENV FUSE_CFLAGS="-I/usr/include/fuse" \
     FUSE_LIBS="-lfuse -L/lib/fuse"
 
 # Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
-# -Wno-cpp is needed for:
-# /usr/include/sys/poll.h:1:2: error: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Werror=cpp]
 RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
     export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
     autoreconf -vif && \
     ./configure && \
     make \
-      CFLAGS="-Wall -O3 -static -Wno-cpp -D_FILE_OFFSET_BITS=64"
+      CFLAGS="-Wall -O3 -static -D_FILE_OFFSET_BITS=64"
 
 # Minify binaries
 # --brute does not work
